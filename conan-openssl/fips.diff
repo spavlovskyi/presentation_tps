@@ -1,0 +1,28 @@
+diff --git a/conanfile.py b/conanfile.py
+--- a/conanfile.py
++++ b/conanfile.py
+@@ -10,13 +10,14 @@
+     name = "OpenSSL"
+     version = "1.0.2r"
+     settings = "os", "compiler", "arch", "build_type"
+-    url = "http://github.com/lasote/conan-openssl"
++#    url = "http://github.com/lasote/conan-openssl"
+     license = "The current OpenSSL licence is an 'Apache style' license: https://www.openssl.org/source/license.html"
+     description = "OpenSSL is an open source project that provides a robust, commercial-grade, and full-featured " \
+                   "toolkit for the Transport Layer Security (TLS) and Secure Sockets Layer (SSL) protocols"
+     exports_sources = ['android.patch']
+     # https://github.com/openssl/openssl/blob/OpenSSL_1_0_2l/INSTALL
+     options = {"no_threads": [True, False],
++               "fips": [True, False],
+                "no_zlib": [True, False],
+                "shared": [True, False],
+                "no_asm": [True, False],
+@@ -48,6 +49,8 @@
+             self.build_requires("strawberryperl/5.26.0@conan/stable")
+             if not self.options.no_asm and self.settings.arch == "x86":
+                 self.build_requires("nasm/2.13.01@conan/stable")
++        if self.options.fips:
++            self.build_requires("fipscanister/2.0.16@local/stable")
+ 
+     def source(self):
+         self.output.info("Downloading %s" % self.source_tgz)
